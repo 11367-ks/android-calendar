@@ -1,6 +1,6 @@
 package com.example.calendar;
 
-import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,14 +8,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     private final ArrayList<String> daysOfMonth;
     private final OnItemListener onItemListener;
-    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener) {
+    private final LocalDate selectedDate;
+
+    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener, LocalDate selectedDate) {
         this.daysOfMonth = daysOfMonth;
         this.onItemListener = onItemListener;
+        this.selectedDate = selectedDate;
     }
 
     @NonNull
@@ -31,6 +36,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         holder.dayOfMonth.setText(daysOfMonth.get(position));
+        if (daysOfMonth.get(position).equals("" + selectedDate.getDayOfMonth()) &&
+                selectedDate.getMonthValue() == Calendar.getInstance().get(Calendar.MONTH) + 1 &&
+                selectedDate.getYear() == Calendar.getInstance().get(Calendar.YEAR)) {
+            holder.dayOfMonth.setBackgroundColor(Color.YELLOW);
+        } else {
+            holder.dayOfMonth.setBackgroundColor(Color.WHITE);
+        }
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener{
     private TextView dateText;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private void setMonthView() {
         dateText.setText(monthYearFromDate(selectedDate));
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this, selectedDate);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
@@ -77,8 +78,11 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
     @Override
     public void onItemClick(int position, String dayText) {
-        if (dayText.isEmpty()){
-            String message = "Selected date" + dayText + " " + monthYearFromDate(selectedDate);
+        if (selectedDate.getMonthValue() == 5 && Objects.equals(dayText, "1")) {
+            String message = "Święto Pracy";
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        } else {
+            String message = "Normal Day";
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
